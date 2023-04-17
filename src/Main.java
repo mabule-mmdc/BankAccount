@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ public class Main {
                 int choice = fileChooser.showOpenDialog(accountList.mainPanel);
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
+                    System.out.println("File path " + fileChooser.getSelectedFile().getAbsolutePath());
                     accountList.setFilePath(fileChooser.getSelectedFile().getAbsolutePath());
                 }
             }

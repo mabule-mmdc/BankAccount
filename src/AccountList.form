@@ -10,20 +10,30 @@
     <children>
       <component id="2a5d7" class="javax.swing.JLabel" binding="accountDetailsHeader">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="127" height="21"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Account Details"/>
         </properties>
       </component>
-      <component id="d7192" class="javax.swing.JList" binding="accountsList">
+      <scrollpane id="e702f" binding="tableScroll">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="eb008" class="javax.swing.JTable" binding="accountsList">
+            <constraints/>
+            <properties>
+              <autoCreateRowSorter value="false"/>
+              <enabled value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>
