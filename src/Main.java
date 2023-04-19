@@ -3,39 +3,67 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 public class Main {
     public static void main(String[] args) {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem openFileMenu = new JMenuItem("Open File");
+        JMenuItem openFilesMenuItem = new JMenuItem("Open Files");
 
         fileMenu.add(openFileMenu);
+        fileMenu.add(openFilesMenuItem);
         menuBar.add(fileMenu);
 
         JFrame frame = new JFrame("AccountList");
 
         frame.setJMenuBar(menuBar);
 
-        AccountList accountList = new AccountList();
+        LoadedFiles loadedFiles = new LoadedFiles();
+        AccountList accountList = new AccountList(loadedFiles);
+        FileChooser fileChooserPanel = new FileChooser(loadedFiles);
 
-        openFileMenu.addActionListener(new ActionListener() {
+        Consumer consumer = new Consumer<Boolean>() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int choice = fileChooser.showOpenDialog(accountList.mainPanel);
+            public void accept(Boolean showMainPanel) {
+                if (showMainPanel) {
+                    frame.setContentPane(accountList.mainPanel);
+                    accountList.loadAccountsTable();
+                } else {
+                    frame.setContentPane(fileChooserPanel.mainPanel);
+                }
 
-                if (choice == JFileChooser.APPROVE_OPTION) {
-                    System.out.println("File path " + fileChooser.getSelectedFile().getAbsolutePath());
-                    accountList.setFilePath(fileChooser.getSelectedFile().getAbsolutePath());
+                frame.pack();
+
+                if (frame.isVisible()) {
+                    frame.repaint();
+                }
+            }
+        };
+
+        fileChooserPanel.setRepainter(consumer);
+
+        frame.setPreferredSize(new Dimension(800, 500));
+        consumer.accept(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setFocusable(true);
+
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_D) {
+                    loadedFiles.setHolderFilePath("/Users/micahbule/Downloads/BankAccount Data - Holders.csv");
+                    loadedFiles.setAccountsFilePath("/Users/micahbule/Downloads/BankAccount Data - Accounts.csv");
+                    loadedFiles.setTransactionsFilePath("/Users/micahbule/Downloads/BankAccount Data - Transactions.csv");
+
+                    consumer.accept(true);
                 }
             }
         });
 
-        frame.setPreferredSize(new Dimension(800, 500));
-        frame.setContentPane(accountList.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
         frame.setVisible(true);
     }
 }
